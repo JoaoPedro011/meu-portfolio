@@ -40,6 +40,23 @@
     --toque: 2.75rem; /* ~44 px: área mínima de toque em links e botões */
 }
 
+/* Tema escuro: ativado por js/scripts.js com <html data-tema="escuro"> */
+:root[data-tema="escuro"] {
+    color-scheme: dark; /* controles nativos (data, áudio, rolagem) também escurecem */
+
+    --cor-texto: #E8EDF2;
+    --cor-fundo: #101B26;
+    --cor-borda: #34495C;
+    --cor-secundaria: #6DB5E3;      /* links e destaques mais claros */
+
+    --cor-titulo: #8CC4EA;
+    --cor-cabecalho: #082B41;
+    --cor-superficie: #1A2B3B;
+    --cor-fundo-suave: #223548;
+    --cor-borda-campo: #4A6178;
+    --sombra: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
 * {
     box-sizing: border-box;
 }
@@ -146,6 +163,33 @@ nav a:focus {
 
 nav a[aria-current="page"] {
     background-color: var(--cor-destaque);
+}
+
+/* Botão de alternar tema (último item do menu, em todas as páginas) */
+nav li.item-tema {
+    flex: 0 0 auto;
+}
+
+.botao-tema {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--toque);
+    height: var(--toque);
+    padding: 0;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--cor-branco);
+    background-color: transparent;
+    border: 2px solid var(--cor-branco);
+    border-radius: var(--raio);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.botao-tema:hover,
+.botao-tema:focus-visible {
+    background-color: var(--cor-acao);
 }
 
 /* ---------- Conteúdo principal e cartões ---------- */
