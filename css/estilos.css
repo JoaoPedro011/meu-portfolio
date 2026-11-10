@@ -22,12 +22,39 @@
     --cor-destaque: #E08E45;
     --cor-borda: #D8CFC2;
 
+    /* Papéis das cores: o tema escuro redefine somente estes valores */
+    --cor-titulo: #0B3D5C;          /* títulos, rótulos e legendas */
+    --cor-cabecalho: #0B3D5C;       /* fundo do cabeçalho e da tabela */
+    --cor-texto-cabecalho: #F4EDE4; /* subtítulo do cabeçalho */
+    --cor-superficie: #FFFFFF;      /* cartões e campos */
+    --cor-fundo-suave: #F4EDE4;     /* faixas e linhas alternadas */
+    --cor-borda-campo: #C9BFAF;
+    --cor-acao: #3A8DBF;            /* fundo de botões e menu em destaque */
+    --sombra: 0 2px 6px rgba(11, 61, 92, 0.12);
+
     --fonte-titulo: 'Poppins', system-ui, sans-serif;
     --fonte-texto: system-ui, -apple-system, Segoe UI, Arial, sans-serif;
 
     --espacamento: 1rem;
     --raio: 10px;
     --toque: 2.75rem; /* ~44 px: área mínima de toque em links e botões */
+}
+
+/* Tema escuro: ativado por js/scripts.js com <html data-tema="escuro"> */
+:root[data-tema="escuro"] {
+    color-scheme: dark; /* controles nativos (data, áudio, rolagem) também escurecem */
+
+    --cor-texto: #E8EDF2;
+    --cor-fundo: #101B26;
+    --cor-borda: #34495C;
+    --cor-secundaria: #6DB5E3;      /* links e destaques mais claros */
+
+    --cor-titulo: #8CC4EA;
+    --cor-cabecalho: #082B41;
+    --cor-superficie: #1A2B3B;
+    --cor-fundo-suave: #223548;
+    --cor-borda-campo: #4A6178;
+    --sombra: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -45,7 +72,7 @@ body {
 
 h1, h2, h3 {
     font-family: var(--fonte-titulo);
-    color: var(--cor-primaria);
+    color: var(--cor-titulo);
     line-height: 1.25;
 }
 
@@ -78,7 +105,7 @@ img {
 /* ---------- Cabeçalho e menu (Flexbox) ---------- */
 
 header {
-    background-color: var(--cor-primaria);
+    background-color: var(--cor-cabecalho);
     color: var(--cor-branco);
     padding: var(--espacamento);
 }
@@ -99,7 +126,7 @@ header h1 {
 
 header p {
     margin: 0;
-    color: var(--cor-fundo);
+    color: var(--cor-texto-cabecalho);
 }
 
 /* Mobile: itens quebram de linha (flex-wrap) e se distribuem em toda a largura */
@@ -130,12 +157,39 @@ nav a {
 
 nav a:hover,
 nav a:focus {
-    background-color: var(--cor-secundaria);
+    background-color: var(--cor-acao);
     text-decoration: none;
 }
 
 nav a[aria-current="page"] {
     background-color: var(--cor-destaque);
+}
+
+/* Botão de alternar tema (último item do menu, em todas as páginas) */
+nav li.item-tema {
+    flex: 0 0 auto;
+}
+
+.botao-tema {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--toque);
+    height: var(--toque);
+    padding: 0;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--cor-branco);
+    background-color: transparent;
+    border: 2px solid var(--cor-branco);
+    border-radius: var(--raio);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.botao-tema:hover,
+.botao-tema:focus-visible {
+    background-color: var(--cor-acao);
 }
 
 /* ---------- Conteúdo principal e cartões ---------- */
@@ -159,10 +213,10 @@ main > section {
 .cartao {
     flex: 1;
     min-width: 0;
-    background-color: var(--cor-branco);
+    background-color: var(--cor-superficie);
     border-radius: var(--raio);
     padding: var(--espacamento);
-    box-shadow: 0 2px 6px rgba(11, 61, 92, 0.12);
+    box-shadow: var(--sombra);
 }
 
 .cartao blockquote {
@@ -170,7 +224,7 @@ main > section {
     margin: 1rem 0 0 0;
     padding-left: 1rem;
     font-style: italic;
-    color: var(--cor-primaria);
+    color: var(--cor-titulo);
 }
 
 .cartao ul,
@@ -229,7 +283,7 @@ address a {
 .lista-interesses li {
     flex: 1 1 14rem;
     padding: 0.75rem 1rem;
-    background-color: var(--cor-fundo);
+    background-color: var(--cor-fundo-suave);
     border-left: 4px solid var(--cor-destaque);
     border-radius: var(--raio);
 }
@@ -250,7 +304,7 @@ caption {
     text-align: left;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: var(--cor-primaria);
+    color: var(--cor-titulo);
 }
 
 th, td {
@@ -258,7 +312,7 @@ th, td {
 }
 
 th {
-    background-color: var(--cor-primaria);
+    background-color: var(--cor-cabecalho);
     color: var(--cor-branco);
 }
 
@@ -305,7 +359,7 @@ td::before {
 }
 
 tbody tr:nth-child(even) {
-    background-color: var(--cor-fundo);
+    background-color: var(--cor-fundo-suave);
 }
 
 /* ---------- Formulário ---------- */
@@ -330,7 +384,7 @@ form {
 
 label {
     font-weight: 600;
-    color: var(--cor-primaria);
+    color: var(--cor-titulo);
 }
 
 input:not([type="radio"]):not([type="checkbox"]),
@@ -340,10 +394,11 @@ textarea {
     min-height: var(--toque);
     font-family: var(--fonte-texto);
     font-size: 1rem;
+    color: var(--cor-texto);
     padding: 0.6rem;
-    border: 1px solid #C9BFAF;
+    border: 1px solid var(--cor-borda-campo);
     border-radius: 6px;
-    background-color: var(--cor-branco);
+    background-color: var(--cor-superficie);
 }
 
 input:focus,
@@ -356,14 +411,14 @@ textarea:focus {
 fieldset {
     min-width: 0;
     margin: 0;
-    border: 1px solid #C9BFAF;
+    border: 1px solid var(--cor-borda-campo);
     border-radius: var(--raio);
     padding: 0.75rem 1rem;
 }
 
 legend {
     font-weight: 600;
-    color: var(--cor-primaria);
+    color: var(--cor-titulo);
     padding: 0 0.5rem;
 }
 
@@ -396,7 +451,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: var(--cor-secundaria);
+    background-color: var(--cor-acao);
 }
 
 /* ---------- Multimídia ---------- */
@@ -459,7 +514,7 @@ canvas {
 footer {
     text-align: center;
     padding: var(--espacamento);
-    color: var(--cor-primaria);
+    color: var(--cor-titulo);
     font-size: 0.9rem;
 }
 
