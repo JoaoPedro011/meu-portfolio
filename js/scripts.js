@@ -5,7 +5,8 @@
    Conteúdo:
    - Armazenamento seguro em localStorage (utilitários)
    - Tema claro/escuro lembrado entre visitas (todas as páginas)
-   - Formulário de contato: validação com mensagens na tela (formulario.html)
+   - Formulário de contato: validação com mensagens na tela e rascunho salvo
+     em localStorage (formulario.html)
    - Gráfico de barras em <canvas> (graficos.html)
    ========================================================================== */
 'use strict';
@@ -197,6 +198,112 @@ function nomeDoCampo(id) {
     return rotulo ? rotulo.textContent.trim() : id;
 }
 
+function limparErros() {
+    CAMPOS_VALIDADOS.forEach((id) => {
+        document.getElementById(id).removeAttribute('aria-invalid');
+        document.getElementById(`erro-${id}`).textContent = '';
+    });
+}
+
+/* ----- Rascunho do formulário (localStorage) -----
+   Chave: "portfolio:rascunho-contato" -> JSON com os campos digitados.
+   Salvo enquanto o visitante digita, restaurado ao reabrir a página e
+   apagado quando a mensagem é enviada ou o rascunho é descartado. */
+
+const CHAVE_RASCUNHO = 'portfolio:rascunho-contato';
+
+function lerDadosDoFormulario(formulario) {
+    const dados = {};
+    CAMPOS_VALIDADOS.forEach((id) => {
+        dados[id] = document.getElementById(id).value;
+    });
+    dados.preferencia = formulario.elements['preferencia'].value;
+    dados.interesses = Array.from(
+        formulario.querySelectorAll('input[name="interesses"]:checked')
+    ).map((caixa) => caixa.value);
+    return dados;
+}
+
+// "Vazio" = nada digitado (a forma de contato já vem marcada por padrão)
+function rascunhoVazio(dados) {
+    const textoVazio = CAMPOS_VALIDADOS.every((id) => dados[id].trim() === '');
+    return textoVazio && dados.interesses.length === 0;
+}
+
+function salvarRascunho(formulario) {
+    const dados = lerDadosDoFormulario(formulario);
+    if (rascunhoVazio(dados)) {
+        removerArmazenamento(CHAVE_RASCUNHO);
+        return;
+    }
+    dados.salvoEm = new Date().toISOString();
+    gravarArmazenamento(CHAVE_RASCUNHO, JSON.stringify(dados));
+}
+
+function lerRascunho() {
+    const texto = lerArmazenamento(CHAVE_RASCUNHO);
+    if (texto === null) {
+        return null;
+    }
+    try {
+        const dados = JSON.parse(texto);
+        return dados && typeof dados === 'object' ? dados : null;
+    } catch (erro) {
+        return null; // conteúdo corrompido: ignora o rascunho
+    }
+}
+
+function preencherFormulario(formulario, dados) {
+    CAMPOS_VALIDADOS.forEach((id) => {
+        if (typeof dados[id] === 'string') {
+            document.getElementById(id).value = dados[id];
+        }
+    });
+    formulario.querySelectorAll('input[name="preferencia"]').forEach((radio) => {
+        radio.checked = radio.value === dados.preferencia || (radio.checked && !dados.preferencia);
+    });
+    const interesses = Array.isArray(dados.interesses) ? dados.interesses : [];
+    formulario.querySelectorAll('input[name="interesses"]').forEach((caixa) => {
+        caixa.checked = interesses.includes(caixa.value);
+    });
+}
+
+function descartarRascunho(formulario) {
+    formulario.reset();
+    limparErros();
+    limparStatus();
+    removerArmazenamento(CHAVE_RASCUNHO);
+    document.getElementById('aviso-rascunho').textContent = '';
+}
+
+function mostrarAvisoRascunho(formulario, dados) {
+    const aviso = document.getElementById('aviso-rascunho');
+    const texto = document.createElement('p');
+    const data = new Date(dados.salvoEm);
+    texto.textContent = Number.isNaN(data.getTime())
+        ? 'Recuperamos o rascunho que você deixou neste formulário.'
+        : `Recuperamos o rascunho salvo em ${data.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}.`;
+
+    const botao = document.createElement('button');
+    botao.type = 'button';
+    botao.textContent = 'Descartar rascunho';
+    botao.addEventListener('click', () => descartarRascunho(formulario));
+
+    aviso.textContent = '';
+    aviso.append(texto, botao);
+}
+
+function restaurarRascunho(formulario) {
+    const dados = lerRascunho();
+    if (dados === null) {
+        return;
+    }
+    preencherFormulario(formulario, dados);
+    if (!rascunhoVazio(lerDadosDoFormulario(formulario))) {
+        mostrarAvisoRascunho(formulario, dados);
+    }
+}
+
 function aoEnviarFormulario(evento, formulario) {
     evento.preventDefault(); // não há servidor: a validação e o feedback acontecem aqui
 
@@ -211,11 +318,7 @@ function aoEnviarFormulario(evento, formulario) {
     }
 
     const primeiroNome = formulario.elements['nome'].value.trim().split(/\s+/)[0];
-    formulario.reset();
-    CAMPOS_VALIDADOS.forEach((id) => {
-        document.getElementById(id).removeAttribute('aria-invalid');
-        document.getElementById(`erro-${id}`).textContent = '';
-    });
+    descartarRascunho(formulario); // mensagem enviada: limpa campos e rascunho salvo
 
     mostrarStatus(
         'sucesso',
@@ -262,6 +365,18 @@ function iniciarFormulario() {
             limparStatus();
         }
     });
+
+    // Rascunho: salva 300 ms depois da última alteração e também ao sair da página
+    let temporizador = null;
+    const agendarSalvamento = () => {
+        clearTimeout(temporizador);
+        temporizador = setTimeout(() => salvarRascunho(formulario), 300);
+    };
+    formulario.addEventListener('input', agendarSalvamento);
+    formulario.addEventListener('change', agendarSalvamento);
+    window.addEventListener('pagehide', () => salvarRascunho(formulario));
+
+    restaurarRascunho(formulario);
 }
 
 /* ---------- Gráfico de barras em canvas (graficos.html) ---------- */
