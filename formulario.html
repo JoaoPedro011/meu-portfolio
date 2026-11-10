@@ -41,41 +41,50 @@
                 <h2 id="titulo-formulario">Fale comigo</h2>
                 <p>Preencha o formulário abaixo para entrar em contato.</p>
 
-                <form action="#" method="post">
+                <form id="form-contato" action="#" method="post" novalidate>
+
+                    <div id="aviso-rascunho" class="aviso-rascunho" role="status"></div>
 
                     <div class="campo">
                         <label for="nome">Nome completo</label>
-                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome" autocomplete="name"
+                            aria-describedby="erro-nome" required>
+                        <p class="erro-campo" id="erro-nome"></p>
                     </div>
 
                     <div class="campo-linha">
                         <div class="campo">
                             <label for="email">E-mail</label>
-                            <input type="email" id="email" name="email" placeholder="voce@exemplo.com" required>
+                            <input type="email" id="email" name="email" placeholder="voce@exemplo.com" autocomplete="email"
+                                aria-describedby="erro-email" required>
+                            <p class="erro-campo" id="erro-email"></p>
                         </div>
 
                         <div class="campo">
                             <label for="telefone">Telefone</label>
                             <input type="tel" id="telefone" name="telefone" placeholder="(11) 91234-5678"
-                                pattern="[0-9\s()+-]{8,15}">
+                                autocomplete="tel" pattern="[0-9\s()+-]{8,15}" aria-describedby="erro-telefone">
+                            <p class="erro-campo" id="erro-telefone"></p>
                         </div>
                     </div>
 
                     <div class="campo-linha">
                         <div class="campo">
                             <label for="assunto">Assunto</label>
-                            <select id="assunto" name="assunto" required>
+                            <select id="assunto" name="assunto" aria-describedby="erro-assunto" required>
                                 <option value="">Selecione...</option>
                                 <option value="trabalho">Proposta de trabalho</option>
                                 <option value="duvida">Dúvida</option>
                                 <option value="parceria">Parceria</option>
                                 <option value="outro">Outro</option>
                             </select>
+                            <p class="erro-campo" id="erro-assunto"></p>
                         </div>
 
                         <div class="campo">
                             <label for="data-contato">Melhor data para retorno</label>
-                            <input type="date" id="data-contato" name="data-contato">
+                            <input type="date" id="data-contato" name="data-contato" aria-describedby="erro-data-contato">
+                            <p class="erro-campo" id="erro-data-contato"></p>
                         </div>
                     </div>
 
@@ -99,9 +108,13 @@
 
                     <div class="campo">
                         <label for="mensagem">Mensagem</label>
-                        <textarea id="mensagem" name="mensagem" rows="5" placeholder="Escreva sua mensagem"
-                            required></textarea>
+                        <textarea id="mensagem" name="mensagem" rows="5"
+                            placeholder="Escreva sua mensagem (mínimo de 10 caracteres)"
+                            aria-describedby="erro-mensagem" required></textarea>
+                        <p class="erro-campo" id="erro-mensagem"></p>
                     </div>
+
+                    <div id="status-formulario" class="status-formulario" role="status"></div>
 
                     <button type="submit">Enviar mensagem</button>
                 </form>
