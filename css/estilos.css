@@ -31,6 +31,10 @@
     --cor-borda-campo: #C9BFAF;
     --cor-acao: #3A8DBF;            /* fundo de botões e menu em destaque */
     --sombra: 0 2px 6px rgba(11, 61, 92, 0.12);
+    --cor-erro: #B3261E;
+    --cor-erro-fundo: #FDECEA;
+    --cor-sucesso: #1B6E2D;
+    --cor-sucesso-fundo: #E6F4EA;
 
     --fonte-titulo: 'Poppins', system-ui, sans-serif;
     --fonte-texto: system-ui, -apple-system, Segoe UI, Arial, sans-serif;
@@ -55,6 +59,10 @@
     --cor-fundo-suave: #223548;
     --cor-borda-campo: #4A6178;
     --sombra: 0 2px 6px rgba(0, 0, 0, 0.5);
+    --cor-erro: #FF9C94;
+    --cor-erro-fundo: #3A1F1F;
+    --cor-sucesso: #7FD99A;
+    --cor-sucesso-fundo: #1B3326;
 }
 
 * {
@@ -454,6 +462,83 @@ button[type="submit"]:hover {
     background-color: var(--cor-acao);
 }
 
+/* ---------- Feedback do formulário (validação e rascunho) ---------- */
+
+/* Mensagem de erro logo abaixo de cada campo (vazia = invisível) */
+.erro-campo {
+    margin: 0;
+    color: var(--cor-erro);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.erro-campo:empty {
+    display: none;
+}
+
+/* Campo inválido: borda vermelha (o texto do erro garante que não depende só da cor) */
+input:not([type="radio"]):not([type="checkbox"])[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    border-color: var(--cor-erro);
+    border-width: 2px;
+}
+
+/* Resumo de erro ou confirmação de envio, acima do botão */
+.status-formulario {
+    padding: 0.75rem 1rem;
+    border-left: 4px solid;
+    border-radius: var(--raio);
+    font-weight: 600;
+}
+
+.status-formulario:empty {
+    display: none;
+}
+
+.status-erro {
+    color: var(--cor-erro);
+    background-color: var(--cor-erro-fundo);
+}
+
+.status-sucesso {
+    color: var(--cor-sucesso);
+    background-color: var(--cor-sucesso-fundo);
+}
+
+/* Aviso de que um rascunho salvo foi restaurado */
+.aviso-rascunho {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--cor-fundo-suave);
+    border-left: 4px solid var(--cor-secundaria);
+    border-radius: var(--raio);
+}
+
+.aviso-rascunho:empty {
+    display: none;
+}
+
+.aviso-rascunho p {
+    margin: 0;
+}
+
+.aviso-rascunho button {
+    align-self: flex-start;
+    min-height: var(--toque);
+    padding: 0 1rem;
+    font-family: var(--fonte-texto);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cor-titulo);
+    background-color: transparent;
+    border: 2px solid var(--cor-titulo);
+    border-radius: var(--raio);
+    cursor: pointer;
+}
+
 /* ---------- Multimídia ---------- */
 
 .midia-container {
@@ -580,6 +665,12 @@ footer {
     button[type="submit"] {
         width: auto;
         justify-self: start;
+    }
+
+    .aviso-rascunho {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
     }
 
     /* Tabela volta ao formato tradicional (linhas e colunas) */
