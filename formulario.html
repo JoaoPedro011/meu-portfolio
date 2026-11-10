@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Formulário de contato de João Pedro Ribeiro Otreira.">
+    <title>João Pedro Ribeiro Otreira - Contato</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="cabecalho-conteudo">
+            <div class="marca">
+                <h1>João Pedro Ribeiro Otreira</h1>
+                <p>Assistente financeiro e estudante de Análise e Desenvolvimento de Sistemas</p>
+            </div>
+
+            <nav aria-label="Navegação principal">
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="curriculo.html">Currículo</a></li>
+                    <li><a href="formulario.html" aria-current="page">Contato</a></li>
+                    <li><a href="multimidia.html">Multimídia</a></li>
+                    <li><a href="graficos.html">Gráficos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="formulario-contato" aria-labelledby="titulo-formulario">
+            <div class="cartao">
+                <h2 id="titulo-formulario">Fale comigo</h2>
+                <p>Preencha o formulário abaixo para entrar em contato.</p>
+
+                <form action="#" method="post">
+
+                    <div class="campo">
+                        <label for="nome">Nome completo</label>
+                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+                    </div>
+
+                    <div class="campo-linha">
+                        <div class="campo">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" name="email" placeholder="voce@exemplo.com" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="telefone">Telefone</label>
+                            <input type="tel" id="telefone" name="telefone" placeholder="(11) 91234-5678"
+                                pattern="[0-9\s()+-]{8,15}">
+                        </div>
+                    </div>
+
+                    <div class="campo-linha">
+                        <div class="campo">
+                            <label for="assunto">Assunto</label>
+                            <select id="assunto" name="assunto" required>
+                                <option value="">Selecione...</option>
+                                <option value="trabalho">Proposta de trabalho</option>
+                                <option value="duvida">Dúvida</option>
+                                <option value="parceria">Parceria</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="campo">
+                            <label for="data-contato">Melhor data para retorno</label>
+                            <input type="date" id="data-contato" name="data-contato">
+                        </div>
+                    </div>
+
+                    <fieldset>
+                        <legend>Forma de contato preferida</legend>
+                        <div class="campo-linha">
+                            <label><input type="radio" name="preferencia" value="email" checked> E-mail</label>
+                            <label><input type="radio" name="preferencia" value="telefone"> Telefone</label>
+                            <label><input type="radio" name="preferencia" value="linkedin"> LinkedIn</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Interesses relacionados</legend>
+                        <div class="campo-linha">
+                            <label><input type="checkbox" name="interesses" value="dados"> Ciência de dados</label>
+                            <label><input type="checkbox" name="interesses" value="automacao"> Automação</label>
+                            <label><input type="checkbox" name="interesses" value="dashboards"> Dashboards</label>
+                        </div>
+                    </fieldset>
+
+                    <div class="campo">
+                        <label for="mensagem">Mensagem</label>
+                        <textarea id="mensagem" name="mensagem" rows="5" placeholder="Escreva sua mensagem"
+                            required></textarea>
+                    </div>
+
+                    <button type="submit">Enviar mensagem</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Mogi das Cruzes, SP - 2026</p>
+    </footer>
+
+</body>
+
+</html>

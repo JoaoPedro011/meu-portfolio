@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página de gráficos de João Pedro Ribeiro Otreira: canvas e SVG.">
+    <title>João Pedro Ribeiro Otreira - Gráficos</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="cabecalho-conteudo">
+            <div class="marca">
+                <h1>João Pedro Ribeiro Otreira</h1>
+                <p>Assistente financeiro e estudante de Análise e Desenvolvimento de Sistemas</p>
+            </div>
+
+            <nav aria-label="Navegação principal">
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="curriculo.html">Currículo</a></li>
+                    <li><a href="formulario.html">Contato</a></li>
+                    <li><a href="multimidia.html">Multimídia</a></li>
+                    <li><a href="graficos.html" aria-current="page">Gráficos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="graficos" aria-labelledby="titulo-graficos">
+            <div class="cartao">
+                <h2 id="titulo-graficos">Nível nas tecnologias favoritas</h2>
+                <p>Gráfico de barras desenhado dinamicamente em <code>&lt;canvas&gt;</code> com
+                    JavaScript, a partir dos níveis apresentados no currículo.</p>
+
+                <div class="graficos-grid">
+                    <div>
+                        <canvas id="grafico-niveis" width="380" height="260"
+                            aria-label="Gráfico de barras com o nível de conhecimento em Python, Agentes de IA, Front-end e SQL"
+                            role="img">
+                            Seu navegador não suporta o elemento canvas.
+                        </canvas>
+                    </div>
+
+                    <div class="svg-caixa">
+                        <h3>Ícone estilizado em SVG</h3>
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img"
+                            aria-label="Ícone de um monitor com um gráfico de crescimento, representando dados e tecnologia">
+                            <rect class="icone-svg" x="20" y="30" width="160" height="100" rx="10" />
+                            <rect x="40" y="50" width="120" height="60" fill="#F4EDE4" />
+                            <polyline points="55,100 80,75 100,90 125,60 145,70"
+                                fill="none" stroke="#E08E45" stroke-width="5"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <rect class="icone-svg" x="85" y="130" width="30" height="15" />
+                            <rect class="icone-svg" x="65" y="145" width="70" height="10" rx="4" />
+                        </svg>
+                        <p>Passe o mouse sobre o ícone para ver o efeito de destaque definido no CSS.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Mogi das Cruzes, SP - 2026</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('grafico-niveis');
+        const ctx = canvas.getContext('2d');
+
+        const dados = [
+            { rotulo: 'Python', nivel: 1 },
+            { rotulo: 'Agentes de IA', nivel: 2 },
+            { rotulo: 'Front-end', nivel: 1 },
+            { rotulo: 'SQL', nivel: 1 }
+        ];
+        const nivelMaximo = 3; // 1 = Iniciante, 2 = Intermediário, 3 = Avançado
+
+        const larguraBarra = 60;
+        const espacoEntreBarras = 30;
+        const alturaMaxima = 180;
+        const baseY = 220;
+
+        ctx.font = '12px system-ui';
+        ctx.textAlign = 'center';
+
+        dados.forEach((item, indice) => {
+            const x = 30 + indice * (larguraBarra + espacoEntreBarras);
+            const alturaBarra = (item.nivel / nivelMaximo) * alturaMaxima;
+            const y = baseY - alturaBarra;
+
+            ctx.fillStyle = '#3A8DBF';
+            ctx.fillRect(x, y, larguraBarra, alturaBarra);
+
+            ctx.fillStyle = '#0B3D5C';
+            ctx.fillText(item.rotulo, x + larguraBarra / 2, baseY + 16);
+        });
+
+        ctx.strokeStyle = '#2B2B2B';
+        ctx.beginPath();
+        ctx.moveTo(20, baseY);
+        ctx.lineTo(360, baseY);
+        ctx.stroke();
+    </script>
+
+</body>
+
+</html>
