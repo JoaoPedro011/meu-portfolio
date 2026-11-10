@@ -1,58 +1,95 @@
-# CP2 — Site Pessoal / Portfólio responsivo
+# Site Pessoal / Portfólio — CP3
 
 **Aluno:** João Pedro Ribeiro Otreira
 **Disciplina:** Desenvolvimento Front-End Para Web
-**Checkpoint:** CP2 — Responsividade (Flexbox, Grid e media queries)
+**Checkpoint:** CP3 — Git, deploy com HTTPS e JavaScript com `localStorage`
 
-Evolução do site do CP1: todas as páginas foram mantidas e adaptadas.
+Evolução do site do CP2 (responsivo, mobile-first). As 5 páginas foram mantidas
+e ganharam interatividade com JavaScript.
+
+## Links da entrega
+
+- **Site publicado (HTTPS):** `https://SEU-USUARIO.github.io/NOME-DO-REPOSITORIO/`
+- **Repositório:** `https://github.com/SEU-USUARIO/NOME-DO-REPOSITORIO`
+- **Tag da entrega:** `cp3-entrega`
+
+> Substitua os endereços acima pelos seus links reais antes de entregar.
 
 ## Estrutura do projeto
 
 ```
-CP2_Joao_Pedro_Otreira/
 ├── index.html        → quem sou eu, foto e resumo de interesses
 ├── curriculo.html    → formação, experiência, tecnologias e contato
-├── formulario.html   → formulário de contato
+├── formulario.html   → formulário de contato (validação + rascunho)
 ├── multimidia.html   → áudio, vídeo e mapa
-├── graficos.html     → canvas (JS) e SVG
-├── css/estilos.css   → folha de estilos única (mobile-first)
-├── img/              → foto, música e prints do CP1
+├── graficos.html     → gráfico em canvas e ícone SVG
+├── css/estilos.css   → estilos mobile-first + paleta do tema escuro
+├── js/scripts.js     → todo o JavaScript do site
+├── img/              → foto de perfil e música favorita
+├── .gitignore
 └── README.md
 ```
 
-## O que foi feito no CP2
+## Features com JavaScript
 
-**Flexbox**
-- Cabeçalho/menu: `display: flex` com `flex-wrap`; no mobile os itens quebram
-  de linha e ocupam a largura toda, no desktop o menu fica à direita do título.
-- Perfil (index), lista de interesses em cartões, campos do formulário e
-  contêineres de mídia também usam Flexbox.
+### 1. Tema claro/escuro (todas as páginas)
 
-**Grid**
-- `curriculo.html`: `grid-template-areas` — 1 coluna (mobile), 2 colunas (768 px)
-  e 3 colunas (1024 px).
-- `multimidia.html`: 2 colunas a partir de 1024 px (vídeo e mapa lado a lado).
-- `graficos.html`: 2 colunas a partir de 640 px.
+O botão com ícone de lua/sol, no final do menu de **todas** as páginas, alterna
+entre o tema claro e o escuro. A escolha é lembrada nas próximas visitas e vale
+para o site inteiro.
 
-**Media queries (somente `min-width`)** — 640 px, 768 px e 1024 px.
+- Na primeira visita, o site segue a preferência do sistema do visitante.
+- O tema é aplicado ainda no `<head>`, para a página não "piscar" no tema errado.
+- Se o visitante trocar o tema em outra aba, as abas abertas acompanham.
 
-**Mídias responsivas** — `img, video { max-width: 100%; height: auto; }`,
-canvas e SVG também se ajustam à largura.
+### 2. Formulário com validação e feedback na tela (`formulario.html`)
 
-**Acessibilidade no toque** — links, botões e campos com altura mínima de ~44 px.
+- Cada campo mostra a mensagem de erro logo abaixo e fica com borda vermelha.
+- Ao enviar com erro, aparece um resumo ("Revise os campos: ...") e o foco vai
+  para o primeiro campo inválido.
+- Regras: nome e sobrenome; e-mail válido; assunto escolhido; mensagem com pelo
+  menos 10 caracteres; telefone com DDD (obrigatório só se a forma de contato
+  preferida for telefone); data de retorno não pode estar no passado.
+- Os erros somem sozinhos conforme o visitante corrige cada campo.
+- Não há servidor: ao enviar com tudo certo, o site mostra uma confirmação na
+  tela e limpa o formulário, mas a mensagem não é enviada a ninguém.
 
-## Correções pendentes do CP1
+### 3. Rascunho do formulário
 
-- Foto de perfil: o caminho `C:\Users\...` foi trocado por `img/foto-perfil.jpg`.
-- Arquivos `foto-perfil.jpg.jpg` e `musica-favorita.mp3.mp3` renomeados e
-  movidos para `img/`, conforme referenciado no HTML.
+O que o visitante digita é salvo automaticamente. Se ele recarregar ou fechar a
+página, os campos voltam preenchidos com o aviso "Recuperamos o rascunho..." e o
+botão **Descartar rascunho**. O rascunho é apagado ao enviar o formulário.
+
+## O que é persistido no `localStorage`
+
+| Chave | Conteúdo | Quando muda |
+|---|---|---|
+| `portfolio:tema` | `"claro"` ou `"escuro"` | ao clicar no botão de tema |
+| `portfolio:rascunho-contato` | JSON com nome, e-mail, telefone, assunto, data, forma de contato, interesses, mensagem e `salvoEm` | enquanto digita; removida ao enviar ou descartar |
+
+Os dados ficam **somente no navegador** do visitante e nunca são enviados a um servidor.
 
 ## Como testar
 
-Abra `index.html` e use o Device Toolbar do DevTools (`Ctrl + Shift + M`)
-em 320 px, 768 px e 1024 px.
+1. Abra o site (publicado ou com `index.html` no navegador).
+2. **Tema:** clique no botão de lua/sol no menu, recarregue a página e navegue
+   por outras páginas: o tema escolhido continua.
+3. **Validação:** em `formulario.html`, clique em *Enviar mensagem* com o
+   formulário vazio e depois digite um e-mail inválido (ex.: `joao@x`).
+4. **Rascunho:** digite um nome e uma mensagem, aguarde um instante e recarregue
+   a página: os campos voltam preenchidos.
+5. **Conferir no DevTools:** `F12` → *Application* → *Local Storage* → selecione o
+   endereço do site e veja as chaves `portfolio:tema` e `portfolio:rascunho-contato`.
+6. **Responsivo:** `Ctrl + Shift + M` e teste em 320 px, 768 px e 1024 px.
+
+## Versionamento
+
+- `main`: versão estável do site.
+- `feature/tema-escuro`: tema claro/escuro com `localStorage` (mesclada na `main`).
+- `feature/validacao-formulario`: validação e rascunho do formulário (mesclada na `main`).
+- Tag `cp3-entrega`: marca o estado exato do código entregue no CP3.
 
 ## Validação
 
-- HTML: [W3C Markup Validator](https://validator.w3.org/)
-- CSS: [W3C CSS Validator](https://jigsaw.w3.org/css-validator/)
+- HTML: [W3C Markup Validator](https://validator.w3.org/nu/) — sem erros nem avisos.
+- CSS: [W3C CSS Validator](https://jigsaw.w3.org/css-validator/) — sem erros (use *upload de arquivo* com `css/estilos.css`).
