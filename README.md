@@ -9,11 +9,9 @@ e ganharam interatividade com JavaScript.
 
 ## Links da entrega
 
-- **Site publicado (HTTPS):** `https://SEU-USUARIO.github.io/NOME-DO-REPOSITORIO/`
-- **Repositório:** `https://github.com/SEU-USUARIO/NOME-DO-REPOSITORIO`
+- **Site publicado (HTTPS):** `https://joaopedro011.github.io/meu-portfolio`
+- **Repositório:** `https://JoaoPedro011/meu-portfolio`
 - **Tag da entrega:** `cp3-entrega`
-
-> Substitua os endereços acima pelos seus links reais antes de entregar.
 
 ## Estrutura do projeto
 
