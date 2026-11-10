@@ -5,6 +5,7 @@
    Conteúdo:
    - Armazenamento seguro em localStorage (utilitários)
    - Tema claro/escuro lembrado entre visitas (todas as páginas)
+   - Formulário de contato: validação com mensagens na tela (formulario.html)
    - Gráfico de barras em <canvas> (graficos.html)
    ========================================================================== */
 'use strict';
@@ -94,6 +95,175 @@ function iniciarTema() {
 // para não piscar o tema claro quando o visitante escolheu o escuro.
 aplicarTema(temaInicial());
 
+/* ---------- Formulário de contato (formulario.html) ---------- */
+
+const CAMPOS_VALIDADOS = ['nome', 'email', 'telefone', 'assunto', 'data-contato', 'mensagem'];
+
+// Data de hoje no formato AAAA-MM-DD (o mesmo valor que o <input type="date"> usa)
+function dataDeHojeISO() {
+    const hoje = new Date();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    return `${hoje.getFullYear()}-${mes}-${dia}`;
+}
+
+// Cada regra recebe o valor do campo e devolve a mensagem de erro ('' = válido)
+const REGRAS = {
+    'nome': (valor) => {
+        const texto = valor.trim();
+        if (texto === '') {
+            return 'Informe seu nome completo.';
+        }
+        if (texto.length < 3 || !/\S+\s+\S+/.test(texto)) {
+            return 'Informe nome e sobrenome.';
+        }
+        return '';
+    },
+
+    'email': (valor) => {
+        const texto = valor.trim();
+        if (texto === '') {
+            return 'Informe seu e-mail.';
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(texto)) {
+            return 'Digite um e-mail válido, como voce@exemplo.com.';
+        }
+        return '';
+    },
+
+    // Opcional, exceto quando o visitante prefere ser contatado por telefone
+    'telefone': (valor, formulario) => {
+        const digitos = valor.replace(/\D/g, '');
+        if (digitos === '') {
+            const preferiuTelefone = formulario.elements['preferencia'].value === 'telefone';
+            return preferiuTelefone ? 'Você escolheu contato por telefone: informe um número.' : '';
+        }
+        if (digitos.length < 10 || digitos.length > 13) {
+            return 'Informe o telefone com DDD, por exemplo (11) 91234-5678.';
+        }
+        return '';
+    },
+
+    'assunto': (valor) => (valor === '' ? 'Escolha um assunto.' : ''),
+
+    // Opcional: se preenchida, não pode ser uma data que já passou
+    'data-contato': (valor) => (
+        valor !== '' && valor < dataDeHojeISO()
+            ? 'Escolha a data de hoje ou uma data futura.'
+            : ''
+    ),
+
+    'mensagem': (valor) => {
+        const texto = valor.trim();
+        if (texto === '') {
+            return 'Escreva sua mensagem.';
+        }
+        if (texto.length < 10) {
+            return `A mensagem precisa ter pelo menos 10 caracteres (você digitou ${texto.length}).`;
+        }
+        return '';
+    }
+};
+
+// Valida um campo, mostra (ou apaga) o erro embaixo dele e devolve true se estiver válido
+function validarCampo(formulario, id) {
+    const campo = document.getElementById(id);
+    const area = document.getElementById(`erro-${id}`);
+    const mensagem = REGRAS[id](campo.value, formulario);
+
+    area.textContent = mensagem;
+    if (mensagem === '') {
+        campo.removeAttribute('aria-invalid');
+    } else {
+        campo.setAttribute('aria-invalid', 'true');
+    }
+    return mensagem === '';
+}
+
+function mostrarStatus(tipo, texto) {
+    const status = document.getElementById('status-formulario');
+    status.textContent = texto;
+    status.className = `status-formulario status-${tipo}`; // tipo: 'erro' ou 'sucesso'
+}
+
+function limparStatus() {
+    const status = document.getElementById('status-formulario');
+    status.textContent = '';
+    status.className = 'status-formulario';
+}
+
+function nomeDoCampo(id) {
+    const rotulo = document.querySelector(`label[for="${id}"]`);
+    return rotulo ? rotulo.textContent.trim() : id;
+}
+
+function aoEnviarFormulario(evento, formulario) {
+    evento.preventDefault(); // não há servidor: a validação e o feedback acontecem aqui
+
+    const invalidos = CAMPOS_VALIDADOS.filter((id) => !validarCampo(formulario, id));
+
+    if (invalidos.length > 0) {
+        const nomes = invalidos.map(nomeDoCampo).join(', ');
+        const rotuloCampos = invalidos.length > 1 ? 'os campos' : 'o campo';
+        mostrarStatus('erro', `Revise ${rotuloCampos}: ${nomes}.`);
+        document.getElementById(invalidos[0]).focus();
+        return;
+    }
+
+    const primeiroNome = formulario.elements['nome'].value.trim().split(/\s+/)[0];
+    formulario.reset();
+    CAMPOS_VALIDADOS.forEach((id) => {
+        document.getElementById(id).removeAttribute('aria-invalid');
+        document.getElementById(`erro-${id}`).textContent = '';
+    });
+
+    mostrarStatus(
+        'sucesso',
+        `Tudo certo, ${primeiroNome}! Sua mensagem foi validada. Como este é um projeto acadêmico sem servidor, ela não é enviada a ninguém.`
+    );
+    document.getElementById('status-formulario').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function iniciarFormulario() {
+    const formulario = document.getElementById('form-contato');
+    if (!formulario) {
+        return; // a página atual não tem o formulário
+    }
+
+    document.getElementById('data-contato').min = dataDeHojeISO();
+
+    formulario.addEventListener('submit', (evento) => aoEnviarFormulario(evento, formulario));
+
+    CAMPOS_VALIDADOS.forEach((id) => {
+        const campo = document.getElementById(id);
+        const revalidarSeComErro = () => {
+            if (campo.getAttribute('aria-invalid') === 'true') {
+                validarCampo(formulario, id);
+            }
+        };
+
+        campo.addEventListener('blur', () => validarCampo(formulario, id)); // ao sair do campo
+        campo.addEventListener('input', revalidarSeComErro);                // some o erro ao corrigir
+        campo.addEventListener('change', revalidarSeComErro);
+    });
+
+    // Trocar a forma de contato pode tornar o telefone obrigatório (ou opcional)
+    formulario.querySelectorAll('input[name="preferencia"]').forEach((radio) => {
+        radio.addEventListener('change', () => {
+            if (document.getElementById('telefone').getAttribute('aria-invalid') === 'true') {
+                validarCampo(formulario, 'telefone');
+            }
+        });
+    });
+
+    // A confirmação de envio some quando o visitante volta a editar
+    formulario.addEventListener('input', () => {
+        if (document.getElementById('status-formulario').classList.contains('status-sucesso')) {
+            limparStatus();
+        }
+    });
+}
+
 /* ---------- Gráfico de barras em canvas (graficos.html) ---------- */
 
 function desenharGrafico() {
@@ -143,5 +313,6 @@ function desenharGrafico() {
 
 document.addEventListener('DOMContentLoaded', () => {
     iniciarTema();
+    iniciarFormulario();
     desenharGrafico();
 });
