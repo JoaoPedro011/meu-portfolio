@@ -59,6 +59,7 @@ function temaInicial() {
 
 function aplicarTema(tema) {
     document.documentElement.setAttribute('data-tema', tema);
+    document.documentElement.setAttribute('data-bs-theme', tema === 'escuro' ? 'dark' : 'light'); // Bootstrap acompanha o tema
 
     const botao = document.getElementById('botao-tema');
     if (botao) {
@@ -324,7 +325,7 @@ function aoEnviarFormulario(evento, formulario) {
         'sucesso',
         `Tudo certo, ${primeiroNome}! Sua mensagem foi validada. Como este é um projeto acadêmico sem servidor, ela não é enviada a ninguém.`
     );
-    document.getElementById('status-formulario').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document.getElementById('status-formulario').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
 }
 
 function iniciarFormulario() {

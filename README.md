@@ -1,17 +1,23 @@
-# Site Pessoal / Portfólio — CP3
+# Site Pessoal / Portfólio — CP4 (versão final)
 
 **Aluno:** João Pedro Ribeiro Otreira
 **Disciplina:** Desenvolvimento Front-End Para Web
-**Checkpoint:** CP3 — Git, deploy com HTTPS e JavaScript com `localStorage`
+**Checkpoint:** CP4 — Bootstrap, acessibilidade e vídeo de apresentação
 
 Evolução do site do CP2 (responsivo, mobile-first). As 5 páginas foram mantidas
 e ganharam interatividade com JavaScript.
 
 ## Links da entrega
 
-- **Site publicado (HTTPS):** `https://joaopedro011.github.io/meu-portfolio`
-- **Repositório:** `https://JoaoPedro011/meu-portfolio`
-- **Tag da entrega:** `cp3-entrega`
+- **Site publicado (HTTPS):** `https://joaopedro011.github.io/meu-portfolio/`
+- **Repositório:** `https://github.com/JoaoPedro011/meu-portfolio`
+- **Tag da entrega:** `cp4-entrega`
+
+## Novidades do CP4
+
+- **Bootstrap 5.3.3** (CDN com SRI): `form-control`, `form-select`, `btn btn-primary` (formulário), `ratio ratio-16x9` (vídeo e mapa responsivos), `img-fluid rounded-circle` (foto), `visually-hidden` e `visually-hidden-focusable` (acessibilidade). O tema escuro também vale para o Bootstrap (`data-bs-theme`).
+- **Acessibilidade:** contraste corrigido (links de 3,2:1 para 6,3:1+; botões de 2,6:1 para 6,2:1+), `alt` da foto corrigido para descrever a imagem real, foco visível em todos os elementos, link "Pular para o conteúdo" para teclado, descrição em texto do gráfico em canvas e respeito a `prefers-reduced-motion`.
+- **Vídeo do YouTube:** `referrerpolicy` no iframe e link alternativo caso o player não carregue.
 
 ## Estrutura do projeto
 
@@ -85,7 +91,7 @@ Os dados ficam **somente no navegador** do visitante e nunca são enviados a um 
 - `main`: versão estável do site.
 - `feature/tema-escuro`: tema claro/escuro com `localStorage` (mesclada na `main`).
 - `feature/validacao-formulario`: validação e rascunho do formulário (mesclada na `main`).
-- Tag `cp3-entrega`: marca o estado exato do código entregue no CP3.
+- Tag `cp4-entrega`: marca o estado exato do código entregue no CP3.
 
 ## Validação
 

@@ -791,3 +791,37 @@ footer {
         grid-column: 1 / -1;
     }
 }
+
+/* ==========================================================================
+   CP4 - Ajustes finais de acessibilidade e integração com Bootstrap
+   (carregado depois do Bootstrap, por isso estas regras prevalecem)
+   Contrastes medidos (WCAG): links 6,3:1+ (antes 3,2:1), botões 5,9:1+
+   (antes 2,6:1 e 3,7:1).
+   ========================================================================== */
+
+:root { --cor-link: #0F5A8A; --cor-acao-forte: #1F6A9A; --cor-ativo: #9C4A00; --cor-foco: #0B3D5C; }
+:root[data-tema="escuro"] { --cor-link: #6DB5E3; --cor-foco: #FFD166; }
+
+a, td::before { color: var(--cor-link); }
+a:hover, a:focus { text-decoration: underline; }
+nav a { color: var(--cor-branco); }
+nav a:hover, nav a:focus, .botao-tema:hover, .botao-tema:focus-visible { background-color: var(--cor-acao-forte); }
+nav a[aria-current="page"] { background-color: var(--cor-ativo); }
+
+/* Foco visível em tudo que recebe teclado (anel claro no cabeçalho escuro) */
+:focus-visible { outline: 3px solid var(--cor-foco); outline-offset: 3px; }
+header :focus-visible { outline-color: #FFFFFF; }
+.form-control:focus, .form-select:focus { outline: 3px solid var(--cor-foco); outline-offset: 2px; box-shadow: none; }
+.visually-hidden-focusable:focus { position: fixed; top: .5rem; left: .5rem; z-index: 2000; padding: .6rem 1rem;
+    background: #FFFFFF; color: #0B3D5C; border: 2px solid #0B3D5C; border-radius: .5rem; font-weight: 700; }
+main:focus { outline: none; }
+
+/* Bootstrap: botão e legendas alinhados à paleta do site */
+button[type="submit"].btn-primary { background-color: var(--cor-link); border-color: var(--cor-link); color: #FFFFFF; font-weight: 600; }
+:root[data-tema="escuro"] button[type="submit"].btn-primary { background-color: #1F6A9A; border-color: #1F6A9A; }
+button[type="submit"].btn-primary:hover { background-color: var(--cor-cabecalho); border-color: var(--cor-cabecalho); }
+legend { float: none; width: auto; font-size: 1rem; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
